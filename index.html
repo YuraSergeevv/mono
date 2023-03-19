@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="title_page">Statistic <br> </div>
+    <div class="inner"></div>
+    <div class="total"></div>
+</body>
+
+<script>
+    window.onload = function() {
+        // let token =  'upeQ2buhRChzCa8cvPJM3J2rSznvqLV12TlQczWITAT4';
+        let token = 'uXYhta4-9qkU-ITryn1qL3NH7XJKP4WR9jANYWRPuAzE';
+        let start = new Date('2023-03-03 00:00:00');
+        let end = new Date();
+        let lastDate = new Date((localStorage.getItem('lastDate')));
+        // end = new Date();
+        console.log(start);
+        console.log(end);
+        let mono = JSON.parse(localStorage.getItem('mono'));
+        console.log((end.getTime() - lastDate.getTime()));
+        if ((end.getTime() - lastDate.getTime()) > 60000) {
+            console.log('new parse')
+            localStorage.clear('mono');
+            localStorage.setItem('lastDate', end);
+            console.log()
+            fetch(`https://api.monobank.ua/personal/statement/0/${+new Date(start)}/${+new Date(end)}`, {
+                    headers: {
+                        'X-Token': `${token}`
+                    }
+                })
+                .then((response) => response.json())
+                .then((data) => localStorage.setItem('mono', JSON.stringify(data)))
+                .then(renderingData);
+        } else {
+            renderingData();
+        }
+
+        function textDate(date) {
+            date = new Date(date)
+            let textString = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + '.' + ((date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)) + '.' + date.getFullYear();
+            textString += ' ' + (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
+            return (textString);
+        }
+
+        function renderingData() {
+            mono = JSON.parse(localStorage.getItem('mono'));
+            if (mono) {
+                mono = mono.reverse();
+                console.log(mono[0]);
+                let sum = 0;
+                mono.forEach(e => {
+                    if (e.currencyCode != 980) {
+                        let date = new Date(e.time * 1000);
+                        document.querySelector('.inner').insertAdjacentHTML("beforeend", `
+                      <div class="card">
+                        <div class="title">${e.description}</div>
+                        <div class="price ua">${e.amount / -100} грн</div>
+                        <div class="price pl">${e.operationAmount / -100} zl</div>
+                        <div class="date">${textDate(e.time*1000)}</div>
+                      </div>
+                    `);
+                        sum += e.operationAmount / 100
+                    }
+                })
+                sum = sum * -1;
+                sum = sum.toFixed(2);
+                document.querySelector('.title_page').insertAdjacentText("beforeend", ` ${textDate(start)} - ${textDate(end)}`);
+                document.querySelector('.total').insertAdjacentText("beforeend", sum);
+            }
+        }
+    }
+</script>
+
+</html>

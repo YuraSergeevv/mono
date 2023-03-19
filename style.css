@@ -1,0 +1,58 @@
+body {
+    font-family: Arial;
+    background-color: #222222;
+    color: #ffffff;
+    padding: 20px;
+}
+
+.title_page {
+    text-align: center;
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.inner {
+    display: grid;
+    grid-gap: 20px;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 350px));
+}
+
+.card {
+    text-align: center;
+    padding: 15px;
+    border: 1px solid #969696;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.price {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.pl {
+    color: red;
+    font-weight: 600;
+}
+
+.date {
+    font-size: 20px;
+}
+
+.total,
+.totalr {
+    margin: 30px 0;
+    text-align: center;
+    font-size: 48px;
+    font-weight: 500;
+}
