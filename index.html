@@ -11,8 +11,8 @@
 
 <body>
     <div class="title_page">Statistic <br> </div>
+    <div class="total"> zl</div>
     <div class="inner"></div>
-    <div class="total"></div>
 </body>
 
 <script>
@@ -74,7 +74,7 @@
                 sum = sum * -1;
                 sum = sum.toFixed(2);
                 document.querySelector('.title_page').insertAdjacentText("beforeend", ` ${textDate(start)} - ${textDate(end)}`);
-                document.querySelector('.total').insertAdjacentText("beforeend", sum);
+                document.querySelector('.total').insertAdjacentText("afterbegin", sum);
             }
         }
     }
